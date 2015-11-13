@@ -38,7 +38,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => '首页', 'url' => ['/site/index']],
 			['label' => '新闻', 'url' => ['/site/about']],
-            ['label' => '楼盘', 'url' => ['/site/contact']],
+            ['label' => '楼盘', 'url' => ['/house/index']],
 			['label' => '活动', 'url' => ['/site/contact']]
         ],
     ]);
@@ -48,9 +48,9 @@ AppAsset::register($this);
             ['label' => '关于', 'url' => ['/site/about']],
             ['label' => '联系', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ?
-                ['label' => 'Login', 'url' => ['/site/login']] :
+                ['label' => '登陆', 'url' => ['/site/login']] :
                 [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                    'label' => '退出 (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ],
@@ -58,9 +58,9 @@ AppAsset::register($this);
     ]);
     NavBar::end();
     ?>
-
     <div class="container">
         <?= Breadcrumbs::widget([
+			'homeLink' => ['label' => '首页', 'url' => ['/site/index']],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= $content ?>
