@@ -24,7 +24,7 @@ class HouseController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-					'houses' => ['post'],
+					// 'houses' => ['post'],
 					'detail' => ['post'],
                 ],
             ],
@@ -53,6 +53,7 @@ class HouseController extends Controller
      */
     public function actionView($id)
     {
+		$this->layout = false;
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -101,23 +102,21 @@ class HouseController extends Controller
 		$result = array();
 		if(isset($_POST['pageSize'])) {
 			$pageSize = $_POST['pageSize'];
-			
 			if(isset($_POST['id'])){
 				$id = $_POST['id'];
-				$houses = House::find()->where("id <= :id and isAllowed = 1")->params([":id" => $id])->select(['id', 'url', 'name', 'intro', 'phone', 'lat', 'lng'])->limit($pageSize)->all();
+				$houses = House::find()->where("id < :id and isAllowed = 1")->params([":id" => $id])->orderBy(['id' => SORT_DESC])->select(['id', 'url', 'name', 'intro', 'phone', 'lat', 'lng'])->limit($pageSize)->all();
 			} else {
-				$houses = House::find()->where("isAllowed = 1")->select(['id', 'url', 'name', 'intro', 'phone', 'lat', 'lng'])->limit($pageSize)->all();
+				$houses = House::find()->where("isAllowed = 1")->orderBy(['id' => SORT_DESC])->select(['id', 'url', 'name', 'intro', 'phone', 'lat', 'lng'])->limit($pageSize)->all();
 			}
+			$result['code'] = 1;
 			if(null != $houses) {
-				$result['code'] = 1;
 				$result['result'] = $houses;
 			} else {
-				$result['code'] = 2;
+				$result['result'] = [];
 			}
 		} else {
-			$houses = House::find()->where("isAllowed = 1")->select(['id', 'url', 'name', 'intro', 'phone', 'lat', 'lng'])->limit(10)->all();
 			$result['code'] = 0;
-			$result['result'] = $houses;
+			$result['result'] = [];
 		}
 		echo JSON::encode($result);
 	}
