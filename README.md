@@ -1,1 +1,1 @@
-House server based php yii2, thanks yii2.
+House server based on php yii2, thanks yii2.
